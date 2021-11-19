@@ -1,0 +1,3 @@
+[submodule "thirdparty/wtl-cxx"]
+	path = thirdparty/wtl-cxx
+	url = git@github:tanjirou-cxx/wtl-cxx.git
