@@ -3,7 +3,11 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
+project(browser-cxx)
+
 # 将源代码添加到此项目的可执行文件。
-add_executable (browser-cxx "browser-cxx.cpp" "browser-cxx.h")
+FILE(GLOB SC_FILES "*.cpp" "*.h")
+
+add_executable (${PROJECT_NAME} WIN32 ${SC_FILES})
 
 # TODO: 如有需要，请添加测试并安装目标。

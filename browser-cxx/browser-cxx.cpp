@@ -1,12 +1,50 @@
-﻿// browser-cxx.cpp: 定义应用程序的入口点。
-//
+﻿#include "stdafx.h"
+#include <iostream>
 
-#include "browser-cxx.h"
+#pragma comment(lib,"gdiplus.lib")
 
-using namespace std;
+CAppModule _Module;
 
-int main()
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+	LPSTR lpCmdLine, int nCmdShow)
 {
-	cout << "Hello CMake." << endl;
-	return 0;
+	_Module.Init(NULL, hInstance);
+
+	Gdiplus::GdiplusStartupInput m_gdiplusStartupInput;
+	ULONG_PTR m_gdiplusToken;
+	Gdiplus::GdiplusStartup(&m_gdiplusToken, &m_gdiplusStartupInput, NULL);
+	
+	class CMainFrame : public CFrameWindowImpl<CMainFrame>
+	{
+		BEGIN_MSG_MAP(CMainFrame)
+
+			MSG_WM_CLOSE(OnClose)
+
+			CHAIN_MSG_MAP(CFrameWindowImpl<CMainFrame>)
+
+		END_MSG_MAP()
+
+		void OnClose()
+		{
+			PostQuitMessage(0);
+			SetMsgHandled(FALSE);
+		}
+	};
+
+	CMainFrame mainFrame;
+	mainFrame.Create(NULL);
+	mainFrame.CenterWindow();
+	mainFrame.ShowWindow(SW_SHOWNORMAL);
+
+	MSG msg;
+
+	while (GetMessage(&msg, NULL, 0, 0) > 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	_Module.Term();
+	Gdiplus::GdiplusShutdown(m_gdiplusToken);
+	return msg.wParam;
 }
